@@ -1,10 +1,12 @@
-defmodule PetalBoilerplate.MixProject do
+defmodule PetalEnhance.MixProject do
   use Mix.Project
+
+  @version "0.1.0"
 
   def project do
     [
-      app: :petal_boilerplate,
-      version: "0.1.0",
+      app: :petal_enhance,
+      version: @version,
       elixir: "~> 1.13",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: Mix.compilers(),
@@ -19,7 +21,7 @@ defmodule PetalBoilerplate.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {PetalBoilerplate.Application, []},
+      mod: {PetalEnhance.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -39,7 +41,7 @@ defmodule PetalBoilerplate.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 3.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 0.18.0"},
+      {:phoenix_live_view, "~> 0.18"},
       {:floki, ">= 0.30.0", only: :test},
       {:phoenix_live_dashboard, "~> 0.7"},
       {:esbuild, "~> 0.5", runtime: Mix.env() == :dev},
@@ -49,8 +51,12 @@ defmodule PetalBoilerplate.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:petal_components, "~> 0.18.0"},
-      {:tailwind, "~> 0.1", runtime: Mix.env() == :dev}
+      {:petal_components, "~> 0.18"},
+      {:tailwind, "~> 0.1", runtime: Mix.env() == :dev},
+      {:tesla, "~> 1.4.3"},
+      {:earmark, "~> 1.4"},
+      {:html_sanitize_ex, "~> 1.4"},
+      {:timex, "~> 3.7"},
     ]
   end
 

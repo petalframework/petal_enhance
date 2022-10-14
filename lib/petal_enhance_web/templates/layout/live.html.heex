@@ -1,0 +1,11 @@
+<main class="h-full dark:bg-gray-900">
+  <div id="notifications">
+    <%= for type <- [:info, :success, :warning, :error] do %>
+      <UI.notification type={type} content={live_flash(@flash, type)} />
+    <% end %>
+  </div>
+
+  <div class="h-full dark:bg-gray-900">
+    <%= @inner_content %>
+  </div>
+</main>

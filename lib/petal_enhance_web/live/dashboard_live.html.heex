@@ -1,0 +1,28 @@
+<.container class="py-16">
+  <.h2>Petal Enhance</.h2>
+  <.h5 class="mt-5">
+    Recipes are code diffs that can be applied to your project. <a
+      class="text-blue-600 underline dark:text-blue-400"
+      href="https://petal.build/enhance"
+      target="_blank"
+    >Read more</a>.
+  </.h5>
+
+  <%= if @loading_recipes do %>
+    <.spinner />
+    <.alert with_icon class="mt-5" heading="API Error" color="danger" label={@api_error} />
+  <% else %>
+    <RecipeUI.grid
+      socket={@socket}
+      categories={@categories}
+      current_category={@current_category}
+      filtered_recipes={@filtered_recipes}
+    />
+  <% end %>
+
+  <%= if @recipe do %>
+    <UI.modal id="modal" show on_cancel={JS.patch(Routes.petal_enhance_path(@socket, :index))}>
+      <RecipeUI.show socket={@socket} recipe={@recipe} live_action={@live_action} />
+    </UI.modal>
+  <% end %>
+</.container>
