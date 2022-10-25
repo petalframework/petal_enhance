@@ -8,8 +8,6 @@ defmodule PetalEnhance.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      # Start the Ecto repository
-      PetalEnhance.Repo,
       # Start the Telemetry supervisor
       PetalEnhanceWeb.Telemetry,
       # Start the PubSub system

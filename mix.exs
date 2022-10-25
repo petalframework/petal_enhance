@@ -36,9 +36,6 @@ defmodule PetalEnhance.MixProject do
   defp deps do
     [
       {:phoenix, "~> 1.6.6"},
-      {:phoenix_ecto, "~> 4.4"},
-      {:ecto_sql, "~> 3.6"},
-      {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 3.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 0.18"},
@@ -68,10 +65,7 @@ defmodule PetalEnhance.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup", "tailwind.install", "esbuild.install"],
-      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
-      "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
+      setup: ["deps.get", "tailwind.install", "esbuild.install"],
       "assets.deploy": [
         "tailwind default --minify",
         "esbuild default --minify",
@@ -79,4 +73,6 @@ defmodule PetalEnhance.MixProject do
       ]
     ]
   end
+
+  def version(), do: @version
 end
