@@ -12,7 +12,9 @@ defmodule PetalEnhanceWeb.DashboardLive do
         category: nil,
         loading_recipes: true,
         recipe: nil,
-        api_error: nil
+        api_error: nil,
+        latest_petal_enhance_version: nil,
+        project: nil
       )
       |> assign_recipes_and_categories()
 
@@ -29,6 +31,8 @@ defmodule PetalEnhanceWeb.DashboardLive do
   end
 
   defp apply_action(socket, :index, _) do
+    RecipesApi.log_event(%{event: "api.recipes.list"})
+
     socket
     |> reset_assigns()
     |> assign(:recipe, nil)
@@ -84,7 +88,7 @@ defmodule PetalEnhanceWeb.DashboardLive do
     RecipesApi.log_event(%{event: "api.recipes.check_works_locally", recipe_id: recipe.id})
     dir = System.tmp_dir!()
     tmp_file = Path.join(dir, "recipe_#{recipe.id}.patch")
-    File.write!(tmp_file, recipe.patch)
+    File.write!(tmp_file, recipe.patch.diff)
 
     cb = fn resp ->
       Process.send(self(), {:blah, resp}, [])
@@ -115,7 +119,7 @@ defmodule PetalEnhanceWeb.DashboardLive do
     RecipesApi.log_event(%{event: "api.recipes.apply", recipe_id: recipe.id})
     dir = System.tmp_dir!()
     tmp_file = Path.join(dir, "recipe_#{recipe.id}.patch")
-    File.write!(tmp_file, recipe.patch)
+    File.write!(tmp_file, recipe.patch.diff)
     result = Mix.shell().cmd("git apply #{tmp_file}")
     File.rm!(tmp_file)
 
@@ -144,7 +148,6 @@ defmodule PetalEnhanceWeb.DashboardLive do
 
   @impl true
   def handle_info({:blah, result}, socket) do
-    IO.inspect(result)
     recipe = socket.assigns.recipe
     current_result = recipe[:git_patch_check_result] || ""
     recipe = Map.merge(recipe, %{git_patch_check_result: current_result <> result})
@@ -234,12 +237,15 @@ defmodule PetalEnhanceWeb.DashboardLive do
       connected?(socket) ->
         case RecipesApi.all() do
           {:ok, data} ->
+            IO.inspect(data)
             assign(socket,
               recipes: data.recipes,
+              project: data.project,
               categories: data.categories,
               default_category: data.default_category,
               api_error: nil,
-              loading_recipes: false
+              loading_recipes: false,
+              latest_petal_enhance_version: data.latest_petal_enhance_version
             )
 
           {:error, error} ->

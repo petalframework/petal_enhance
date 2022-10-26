@@ -1,5 +1,8 @@
 <.container class="py-16">
-  <.h2>Petal Enhance</.h2>
+  <.h2 class="flex items-center gap-2">
+    <Heroicons.sparkles class="w-10 h-10" />
+    <div>Petal Enhance</div>
+  </.h2>
   <.h5 class="mt-5">
     Recipes are code diffs that can be applied to your project. <a
       class="text-blue-600 underline dark:text-blue-400"
@@ -8,21 +11,57 @@
     >Read more</a>.
   </.h5>
 
+  <%= if @project do %>
+    <div class="flex justify-between">
+      <div class="flex gap-2">
+        <Heroicons.check class="w-5 h-5" />
+        <div>
+          Connected to the project
+          <a
+            class="text-blue-600 underline dark:text-blue-400"
+            href={@project.petal_build_url}
+            target="_blank"
+          >
+            <%= @project.name %>
+          </a>
+          built on "<%= @project.boilerplate_name %>".
+        </div>
+      </div>
+
+      <div>
+        <%= if @project.module_name do %>
+          Module name: <%= @project.module_name %>.
+        <% else %>
+          <.alert color="danger" label="No module name set. Please set it to your application module name. eg. `PetalPro`" />
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <%= if @latest_petal_enhance_version && @latest_petal_enhance_version != PetalEnhance.MixProject.version() do %>
+    <.alert with_icon color="warning" heading="Petal Enhance has been upgraded!">
+      A new version of Petal Enhance is available (<%= @latest_petal_enhance_version %>). Please run `mix deps.update petal_enhance` and reload this page.
+    </.alert>
+  <% end %>
+
   <%= if @loading_recipes do %>
     <.spinner />
     <.alert with_icon class="mt-5" heading="API Error" color="danger" label={@api_error} />
   <% else %>
     <RecipeUI.grid
       socket={@socket}
-      categories={@categories}
       current_category={@current_category}
       filtered_recipes={@filtered_recipes}
     />
   <% end %>
 
   <%= if @recipe do %>
-    <UI.modal id="modal" show on_cancel={JS.patch(Routes.petal_enhance_path(@socket, :index))}>
-      <RecipeUI.show socket={@socket} recipe={@recipe} live_action={@live_action} />
-    </UI.modal>
+    <RecipeUI.recipe_modal
+      id="modal"
+      show
+      on_cancel={JS.patch(Routes.petal_enhance_path(@socket, :index))}
+    >
+      <RecipeUI.show_recipe socket={@socket} recipe={@recipe} live_action={@live_action} />
+    </RecipeUI.recipe_modal>
   <% end %>
 </.container>

@@ -7,10 +7,10 @@ defmodule PetalEnhance.MixProject do
     [
       app: :petal_enhance,
       version: @version,
-      elixir: "~> 1.13",
+      elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: Mix.compilers(),
-      start_permanent: Mix.env() == :prod,
+      start_permanent: false,
       aliases: aliases(),
       deps: deps()
     ]

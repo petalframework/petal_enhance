@@ -8,18 +8,10 @@ defmodule PetalEnhance.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      # Start the Telemetry supervisor
-      PetalEnhanceWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: PetalEnhance.PubSub},
-      # Start the Endpoint (http/https)
       PetalEnhanceWeb.Endpoint
-      # Start a worker by calling: PetalEnhance.Worker.start_link(arg)
-      # {PetalEnhance.Worker, arg}
     ]
-
-    # See https://hexdocs.pm/elixir/Supervisor.html
-    # for other strategies and supported options
     opts = [strategy: :one_for_one, name: PetalEnhance.Supervisor]
     Supervisor.start_link(children, opts)
   end

@@ -1,15 +1,15 @@
 defmodule PetalEnhanceWeb.Routes do
-  """
+  @moduledoc """
   ## Usage
-  ```elixir
-  # lib/my_app_web/router.ex
-  use MyAppWeb, :router
-  import PetalEnhanceWeb.Routes
-  ...
-  scope "/" do
-    pipe_through :browser
-    live_petal_enhance "/__enhance"
-  end
+
+  In lib/my_app_web/router.ex
+      use MyAppWeb, :router
+      import PetalEnhanceWeb.Routes
+
+      scope "/" do
+        pipe_through :browser
+        live_petal_enhance "/dev/enhance"
+      end
   ```
   """
   defmacro petal_enhance_dashboard(path, opts \\ []) do
@@ -31,6 +31,7 @@ defmodule PetalEnhanceWeb.Routes do
           live_session :petal_enhance, [
             root_layout: {PetalEnhanceWeb.LayoutView, :root}
           ] do
+
             live "/", PetalEnhanceWeb.DashboardLive, :index, as: :petal_enhance
             live "/recipes/:id", PetalEnhanceWeb.DashboardLive, :show, as: :petal_enhance
             live "/recipes/:id/diff", PetalEnhanceWeb.DashboardLive, :diff, as: :petal_enhance

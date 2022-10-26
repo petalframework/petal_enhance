@@ -31,42 +31,20 @@ defmodule PetalEnhance.RecipesApi do
   end
 
   def client() do
-    token = System.get_env("PETAL_BUILD_API_TOKEN")
-    host = System.get_env("PETAL_BUILD_HOST", "https://petal.build")
+    token = Application.get_env(:petal_enhance, :api_token)
+    project = Application.get_env(:petal_enhance, :project)
+    host = Application.get_env(:petal_enhance, :petal_build_host, "https://petal.build")
     base_url = host <> "/api"
 
     middleware = [
       {Tesla.Middleware.BaseUrl, base_url},
       Tesla.Middleware.JSON,
-      {Tesla.Middleware.Headers, [{"authorization", "token: " <> (token || "") }]}
+      {Tesla.Middleware.Headers, [
+        {"authorization", "token: " <> token},
+        {"project", project}
+      ]}
     ]
 
     Tesla.client(middleware)
-  end
-
-  def list() do
-    [
-      %{
-        id: "uuid",
-        label: "UUID",
-        description:
-          "Use UUIDs instead of sequential integers for IDs (all tables). Modifies migration files.",
-        tags: ["database", "ecto", "setup"]
-      },
-      %{
-        id: "first-name-last-name",
-        label: "User first name & last name",
-        description:
-          "Change `user.name` to `user.first_name` and `user.last_name`. Modifies migration files.",
-        tags: ["database", "ecto", "user", "setup"]
-      },
-      %{
-        id: "npm",
-        label: "NPM package manager",
-        tags: ["javascript", "core"],
-        description:
-          "app.js can import NPM packages. They will be stored in `assets/node_modules`."
-      }
-    ]
   end
 end

@@ -62,6 +62,11 @@ config :tailwind,
     cd: Path.expand("../assets", __DIR__)
   ]
 
+config :petal_enhance,
+  petal_build_host: "http://localhost:4001",
+  project: System.get_env("PETAL_BUILD_PROJECT"),
+  api_token: System.get_env("PETAL_BUILD_API_TOKEN")
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
