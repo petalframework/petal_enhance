@@ -14,6 +14,7 @@
 
 ```elixir
 # router.ex
+  import PetalEnhanceWeb.Routes
 
   scope "/" do
     pipe_through :browser
@@ -23,13 +24,14 @@
 
 3. Create a project on [petal.build](https://petal.build)
 
+4. Update your config in `dev.exs`
 
-4. Copy your env vars
+Use environment variables if you can (eg. `System.get_env("PETAL_BUILD_API_TOKEN")`).
 
 ```
-# .envrc
-export PETAL_BUILD_PROJECT=""
-export PETAL_BUILD_API_TOKEN=""
+config :petal_enhance,
+  project: "xxx",
+  api_token: "xxx"
 ```
 
 5. Browse recipes and apply them
