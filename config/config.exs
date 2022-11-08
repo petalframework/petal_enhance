@@ -63,7 +63,7 @@ config :tailwind,
   ]
 
 config :petal_enhance,
-  petal_build_host: "http://localhost:4001",
+  petal_build_host: System.get_env("PETAL_BUILD_HOST"),
   project: System.get_env("PETAL_BUILD_PROJECT"),
   api_token: System.get_env("PETAL_BUILD_API_TOKEN")
 

@@ -7,7 +7,7 @@
 ```elixir
 # mix.exs
 
-{:petal_enhance, git: "https://github.com/petalframework/petal_enhance"},
+{:petal_enhance, git: "https://github.com/petalframework/petal_enhance", only: :dev},
 ```
 
 2. Add route
@@ -24,7 +24,7 @@
 3. Create a project on [petal.build](https://petal.build)
 
 
-4. Copy your env vars 
+4. Copy your env vars
 
 ```
 # .envrc
