@@ -63,6 +63,7 @@ config :tailwind,
   ]
 
 config :petal_enhance,
+  router_helpers: PetalEnhanceWeb.Router.Helpers,
   petal_build_host: System.get_env("PETAL_BUILD_HOST"),
   project: System.get_env("PETAL_BUILD_PROJECT"),
   api_token: System.get_env("PETAL_BUILD_API_TOKEN")

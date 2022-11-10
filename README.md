@@ -1,5 +1,9 @@
 # Petal Enhance
 
+## Petal Pro users
+
+Start the server
+
 ## Install
 
 1. Install dep:
@@ -16,10 +20,21 @@
 # router.ex
   import PetalEnhanceWeb.Routes
 
-  scope "/" do
-    pipe_through :browser
-    petal_enhance_dashboard "/_enhance"
-  end
+  petal_enhance_dashboard "/_enhance"
+```
+
+3. Update `tailwind.config.js`
+
+The `content` array must include a reference to the petal_enhance lib.
+
+```js
+module.exports = {
+  content: [
+    ...,
+    "../deps/petal_enhance/**/*.*ex",
+  ],
+  ...
+}
 ```
 
 3. Create a project on [petal.build](https://petal.build)
@@ -30,9 +45,12 @@ Use environment variables if you can (eg. `System.get_env("PETAL_BUILD_API_TOKEN
 
 ```
 config :petal_enhance,
+  router_helpers: <YourRouter>.Helpers,
   project: "xxx",
   api_token: "xxx"
 ```
+
+Replace <YourRouter> with your routers module name. Just open `router.ex` to see it. Usually it's something like `YourAppWeb.Router`.
 
 5. Browse recipes and apply them
 

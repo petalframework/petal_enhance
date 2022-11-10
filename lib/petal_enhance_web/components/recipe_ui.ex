@@ -2,6 +2,7 @@ defmodule PetalEnhanceWeb.Components.RecipeUI do
   use PetalEnhanceWeb, :component
 
   attr :socket, :map, required: true
+  attr :router_helpers, :map, required: true
   attr :current_category, :string
   attr :filtered_recipes, :list, default: []
 
@@ -15,13 +16,14 @@ defmodule PetalEnhanceWeb.Components.RecipeUI do
 
     <div class="grid grid-cols-1 col-span-3 mt-10 gap-y-6 gap-x-6 sm:grid-cols-3 sm:gap-y-10 xl:gap-x-8">
       <%= for recipe <- @filtered_recipes do %>
-        <.recipe_card recipe={recipe} socket={@socket} />
+        <.recipe_card recipe={recipe} socket={@socket} router_helpers={@router_helpers} />
       <% end %>
     </div>
     """
   end
 
   attr :recipe, :map, required: true
+  attr :router_helpers, :map, required: true
   attr :socket, :map, required: true
 
   def recipe_card(assigns) do
@@ -48,7 +50,7 @@ defmodule PetalEnhanceWeb.Components.RecipeUI do
           <div class="text-sm font-medium">Free</div>
         </div>
           <.link
-            patch={Routes.petal_enhance_path(@socket, :show, @recipe.id)}
+            patch={@router_helpers.petal_enhance_path(@socket, :show, @recipe.id)}
             class="block mt-4 font-medium text-slate-900"
           >
             <span class="absolute -inset-px rounded-xl"></span>
@@ -110,6 +112,7 @@ defmodule PetalEnhanceWeb.Components.RecipeUI do
 
   attr :recipe, :map, required: true
   attr :socket, :map, required: true
+  attr :router_helpers, :map, required: true
   attr :live_action, :atom, required: true
 
   def show_recipe(assigns) do
@@ -125,7 +128,7 @@ defmodule PetalEnhanceWeb.Components.RecipeUI do
         underline
         link_type="live_patch"
         is_active={@live_action == :show}
-        to={Routes.petal_enhance_path(@socket, :show, @recipe.id)}
+        to={@router_helpers.petal_enhance_path(@socket, :show, @recipe.id)}
       >
         <Heroicons.document_text mini class="w-4 h-4 mr-2" /> Readme
       </.tab>
@@ -133,7 +136,7 @@ defmodule PetalEnhanceWeb.Components.RecipeUI do
         underline
         link_type="live_patch"
         is_active={@live_action == :diff}
-        to={Routes.petal_enhance_path(@socket, :diff, @recipe.id)}
+        to={@router_helpers.petal_enhance_path(@socket, :diff, @recipe.id)}
       >
         <Heroicons.arrows_right_left mini class="w-4 h-4 mr-2" /> Diff
       </.tab>
@@ -141,7 +144,7 @@ defmodule PetalEnhanceWeb.Components.RecipeUI do
         underline
         link_type="live_patch"
         is_active={@live_action == :apply}
-        to={Routes.petal_enhance_path(@socket, :apply, @recipe.id)}
+        to={@router_helpers.petal_enhance_path(@socket, :apply, @recipe.id)}
       >
         <Heroicons.play mini class="w-4 h-4 mr-2" /> Apply
       </.tab>

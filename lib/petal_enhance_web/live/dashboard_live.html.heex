@@ -1,3 +1,11 @@
+<script>
+  <%= File.read!(Application.app_dir(:petal_enhance, "priv/static/assets/app.js")) |> raw() %>
+</script>
+
+<style>
+  <%= File.read!(Application.app_dir(:petal_enhance, "priv/static/assets/app.css")) |> raw() %>
+</style>
+
 <.container class="py-16">
   <.h2 class="flex items-center gap-2">
     <Heroicons.sparkles class="w-10 h-10" />
@@ -49,6 +57,7 @@
     <.alert with_icon class="mt-5" heading="API Error" color="danger" label={@api_error} />
   <% else %>
     <RecipeUI.grid
+      router_helpers={@router_helpers}
       socket={@socket}
       current_category={@current_category}
       filtered_recipes={@filtered_recipes}
@@ -59,9 +68,9 @@
     <RecipeUI.recipe_modal
       id="modal"
       show
-      on_cancel={JS.patch(Routes.petal_enhance_path(@socket, :index))}
+      on_cancel={JS.patch(@router_helpers.petal_enhance_path(@socket, :index))}
     >
-      <RecipeUI.show_recipe socket={@socket} recipe={@recipe} live_action={@live_action} />
+      <RecipeUI.show_recipe socket={@socket} recipe={@recipe} live_action={@live_action} router_helpers={@router_helpers} />
     </RecipeUI.recipe_modal>
   <% end %>
 </.container>

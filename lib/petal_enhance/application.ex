@@ -7,13 +7,16 @@ defmodule PetalEnhance.Application do
 
   @impl true
   def start(_type, _args) do
-    children = [
-      # Start the PubSub system
-      {Phoenix.PubSub, name: PetalEnhance.PubSub},
-      PetalEnhanceWeb.Endpoint
-    ]
-    opts = [strategy: :one_for_one, name: PetalEnhance.Supervisor]
-    Supervisor.start_link(children, opts)
+    if System.get_env("TESTING_LOCALLY") == "true" do
+      children = [
+        {Phoenix.PubSub, name: PetalEnhance.PubSub},
+        PetalEnhanceWeb.Endpoint
+      ]
+      opts = [strategy: :one_for_one, name: PetalEnhance.Supervisor]
+      Supervisor.start_link(children, opts)
+    else
+      {:ok, self()}
+    end
   end
 
   # Tell Phoenix to update the endpoint configuration

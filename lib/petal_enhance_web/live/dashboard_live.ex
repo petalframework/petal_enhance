@@ -14,7 +14,8 @@ defmodule PetalEnhanceWeb.DashboardLive do
         recipe: nil,
         api_error: nil,
         latest_petal_enhance_version: nil,
-        project: nil
+        project: nil,
+        router_helpers: Application.get_env(:petal_enhance, :router_helpers)
       )
       |> assign_recipes_and_categories()
 
@@ -78,6 +79,7 @@ defmodule PetalEnhanceWeb.DashboardLive do
       |> reset_assigns()
       |> load_and_assign_full_recipe(recipe_id)
 
+    IO.inspect(socket.assigns.recipe)
     socket
     |> assign(:page_title, socket.assigns.recipe.name)
   end
@@ -85,18 +87,25 @@ defmodule PetalEnhanceWeb.DashboardLive do
   @impl true
   def handle_event("check_patch", _, socket) do
     recipe = socket.assigns.recipe
+
     RecipesApi.log_event(%{event: "api.recipes.check_works_locally", recipe_id: recipe.id})
     dir = System.tmp_dir!()
     tmp_file = Path.join(dir, "recipe_#{recipe.id}.patch")
     File.write!(tmp_file, recipe.patch.diff)
 
+    IO.inspect(dir, label: "dir")
+    IO.inspect(tmp_file, label: "tmp file")
+    IO.inspect(recipe.patch.diff, label: "diff")
+
     cb = fn resp ->
-      Process.send(self(), {:blah, resp}, [])
+      Process.send(self(), {:assign_git_patch_result, resp}, [])
     end
 
     result = Mix.Shell.cmd("git apply --check #{tmp_file}", [], cb)
 
-    File.rm!(tmp_file)
+    if File.exists?(tmp_file) do
+      File.rm!(tmp_file)
+    end
 
     state =
       case result do
@@ -143,11 +152,11 @@ defmodule PetalEnhanceWeb.DashboardLive do
 
   @impl true
   def handle_event("close_modal", _, socket) do
-    {:noreply, push_patch(socket, to: Routes.petal_enhance_path(socket, :index))}
+    {:noreply, push_patch(socket, to: socket.assigns.router_helpers.petal_enhance_path(socket, :index))}
   end
 
   @impl true
-  def handle_info({:blah, result}, socket) do
+  def handle_info({:assign_git_patch_result, result}, socket) do
     recipe = socket.assigns.recipe
     current_result = recipe[:git_patch_check_result] || ""
     recipe = Map.merge(recipe, %{git_patch_check_result: current_result <> result})
@@ -237,7 +246,6 @@ defmodule PetalEnhanceWeb.DashboardLive do
       connected?(socket) ->
         case RecipesApi.all() do
           {:ok, data} ->
-            IO.inspect(data)
             assign(socket,
               recipes: data.recipes,
               project: data.project,
