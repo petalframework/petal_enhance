@@ -23,20 +23,6 @@ Start the server
   petal_enhance_dashboard "/_enhance"
 ```
 
-3. Update `tailwind.config.js`
-
-The `content` array must include a reference to the petal_enhance lib.
-
-```js
-module.exports = {
-  content: [
-    ...,
-    "../deps/petal_enhance/**/*.*ex",
-  ],
-  ...
-}
-```
-
 3. Create a project on [petal.build](https://petal.build)
 
 4. Update your config in `dev.exs`
