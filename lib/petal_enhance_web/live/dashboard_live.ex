@@ -79,7 +79,6 @@ defmodule PetalEnhanceWeb.DashboardLive do
       |> reset_assigns()
       |> load_and_assign_full_recipe(recipe_id)
 
-    IO.inspect(socket.assigns.recipe)
     socket
     |> assign(:page_title, socket.assigns.recipe.name)
   end
@@ -92,10 +91,6 @@ defmodule PetalEnhanceWeb.DashboardLive do
     dir = System.tmp_dir!()
     tmp_file = Path.join(dir, "recipe_#{recipe.id}.patch")
     File.write!(tmp_file, recipe.patch.diff)
-
-    IO.inspect(dir, label: "dir")
-    IO.inspect(tmp_file, label: "tmp file")
-    IO.inspect(recipe.patch.diff, label: "diff")
 
     cb = fn resp ->
       Process.send(self(), {:assign_git_patch_result, resp}, [])

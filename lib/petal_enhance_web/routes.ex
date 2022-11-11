@@ -13,8 +13,6 @@ defmodule PetalEnhanceWeb.Routes do
   ```
   """
   defmacro petal_enhance_dashboard(path, opts \\ []) do
-    opts = Keyword.put(opts, :application_router, __CALLER__.module)
-
     quote bind_quoted: binding() do
       scope path, alias: false, as: false do
         import Phoenix.LiveView.Router, only: [live: 4, live_session: 3]
