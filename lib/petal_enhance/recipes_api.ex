@@ -33,7 +33,7 @@ defmodule PetalEnhance.RecipesApi do
   def client() do
     token = Application.get_env(:petal_enhance, :api_token)
     project = Application.get_env(:petal_enhance, :project)
-    host = Application.get_env(:petal_enhance, :petal_build_host, "https://petal.build")
+    host = Application.get_env(:petal_enhance, :petal_build_host) || "https://petal.build"
     base_url = host <> "/api"
 
     middleware = [
