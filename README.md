@@ -2,11 +2,11 @@
 
 ## Petal Pro users
 
-Start the server
+Petal Pro has this project installed already. Follow steps 3 onwards below.
 
-## Install
+## Normal Phoenix users
 
-1. Install dep:
+1. Install deps:
 
 ```elixir
 # mix.exs
