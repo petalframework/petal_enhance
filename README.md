@@ -11,16 +11,18 @@ Petal Pro has this project installed already. Follow steps 3 onwards below.
 ```elixir
 # mix.exs
 
-{:petal_enhance, git: "https://github.com/petalframework/petal_enhance", only: :dev},
+{:petal_enhance, git: "https://github.com/petalframework/petal_enhance", only: [:test, :dev]},
 ```
 
 2. Add route
 
 ```elixir
 # router.ex
-  import PetalEnhanceWeb.Routes
 
-  petal_enhance_dashboard "/_enhance"
+import PetalEnhanceWeb.Routes
+
+# This shouldn't be in a "scope"
+petal_enhance_dashboard "/_enhance"
 ```
 
 3. Create a project on [petal.build](https://petal.build)
@@ -31,7 +33,7 @@ Use environment variables if you can (eg. `System.get_env("PETAL_BUILD_API_TOKEN
 
 ```
 config :petal_enhance,
-  router_helpers: <YourRouter>.Helpers,
+  router_helpers: <YourApp>.Router.Helpers,
   project: "xxx",
   api_token: "xxx"
 ```
